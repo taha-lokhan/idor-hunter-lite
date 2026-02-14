@@ -1,0 +1,7 @@
+target: https://api.example.com/users/{id}
+id_range:
+  - 1
+  - 100
+headers:
+  - "Authorization: Bearer ABC"
+concurrency: 5
