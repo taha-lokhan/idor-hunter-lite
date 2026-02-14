@@ -2,18 +2,16 @@
 IDOR scanner core: runs the async scan, diffs responses.
 """
 import asyncio
+import httpx
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-from urllib.parse import urljoin
 
 from rich.console import Console
 from rich.progress import Progress, BarColumn, TextColumn, TimeRemainingColumn
-from rich.table import Table
 
 from .config import ScanConfig
 from .models import ScanResult, ScanStats
 from .http_client import fetch_url
-from .diffing import compare_response
 
 console = Console()
 REPORTS_DIR = Path("reports")
@@ -36,7 +34,7 @@ async def run_scan_async(
         return results, pattern_stats
 
     # Use proxies via environment (Burp / ZAP)
-    async with httpx.AsyncClient(http2=True, timeout=30.0) as client:
+    async with httpx.AsyncClient(timeout=30.0) as client:
         with Progress(
             TextColumn("[progress.description]{task.description}"),
             BarColumn(bar_width=40),
@@ -120,13 +118,22 @@ def run_scan(
             errors += 1
 
         # diff against baseline
-        if baseline_status is not None:
+        if baseline_status is not None and r.status is not None:
             r.diff_status = r.status != baseline_status
             if r.diff_status:
                 status_changes += 1
+        
         if baseline_len != 0:
             r.diff_len = r.body_len != baseline_len
             if r.diff_len:
                 length_changes += 1
 
-    stats
+    stats = ScanStats(
+        total=total,
+        success=success,
+        errors=errors,
+        status_changes=status_changes,
+        length_changes=length_changes,
+    )
+
+    return results, stats
