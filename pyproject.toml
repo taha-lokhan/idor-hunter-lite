@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "idor"
+dynamic = ["version"]
+dependencies = [
+    "httpx>=0.23.0",
+    "click>=8.0.0",
+    "rich>=13.0.0",
+    "jinja2>=3.0.0",
+]
+description = "Professional IDOR scanner for detecting insecure direct object references."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [
+    { name = "Taha Lokhan"}
+]
+requires-python = ">=3.9"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Security",
+    "Topic :: Software Development",
+]
+
+[project.scripts]
+idor = "idor.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
