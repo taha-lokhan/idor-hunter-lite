@@ -19,6 +19,6 @@ A professional, CLI‑driven Python tool for detecting Insecure Direct Object Re
 ## Installation
 
 ```bash
-git clone https://github.com/yourusername/IDOR.git
+git clone https://github.com/taha-lokhan/IDOR.git
 cd IDOR
 pip install -e .
